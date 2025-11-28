@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FitnessSAC | Gestión Entrenamiento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  </head>
+  <body>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a th:href="@{/dashboardAdministrador}" class="nav-link active" aria-current="page">Home</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Reclamos</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Pricing</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
+    <div class="container">
+        <h1>Gestión de Entrenamientos</h1>
+        <br>
+        <h2>Registro de Entrenamiento</h2>
+        <!--Inicio formulario-->
+        <form th:action="@{/entrenamiento/registrar}" method="post" th:object="${nuevoEntrenamiento}">
+            <div class="row">
+                <div class="col-4">
+                    <label for="txtEsp" class="form-label">Tipo:</label>                                                    
+                    <select class="form-select" id="tipo" th:field="*{tipo}" required>
+                        <option value="personal">Personal</option>
+                        <option value="grupal">Grupal</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label for="txtEsp" class="form-label">Lugar:</label>                                                    
+                    <select class="form-select" id="lugar" th:field="*{lugar}" required>
+                        <option value="aire_libre">Aire Libre</option>
+                        <option value="local">Local</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label for="txtFec" class="form-label">Fecha:</label>                                                   
+                    <input type="date" class="form-control" id="txtFec" name="txtFec" required th:field="*{fecha}">
+                </div>
+            </div>
+            <div class="row"> 
+                <div class="col-4">
+                    <label for="txtCap" class="form-label">Capacidad:</label>                                                   
+                    <input type="number" class="form-control" id="txtCap" name="txtCap" placeholder="Ingrese la capacidad máxima" required th:field="*{capacidad}">
+                </div>
+                <div class="col-4">
+                    <label for="txtDur" class="form-label">Duración:</label>                                                   
+                    <input type="number" class="form-control" id="txtDur" name="txtDur" placeholder="Ingrese la duración" required th:field="*{duracion}">
+                </div>
+                <div class="col-4">
+                    <label for="txtHI" class="form-label">Hora Inicio:</label>                                                   
+                    <input type="time" class="form-control" id="txtHI" name="txtHI" required th:field="*{horaInicio}">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4">
+                    <label for="txtHF" class="form-label">Hora Fin:</label>                                                   
+                    <input type="time" class="form-control" id="txtHF" name="txtHF" required th:field="*{horaFin}">
+                </div>
+                <div class="col-4">
+                    <label for="cboEntrenador" class="form-label">Entrenador:</label>                                          
+                    <select class="form-select" id="cboEntrenador" name="cboEntrenador" required th:field="*{entrenador}">
+                        <option value="">Seleccione un Entrenador</option>
+                        <option th:each="entd : ${listaEntrenadores}" th:value="${entd.idTrainer}" th:text="${entd.nombres}"></option>
+                    </select>
+                </div>   
+                <div class="col-4">
+                    <label for="cboEpacio" class="form-label">Espacio:</label>                                          
+                    <select class="form-select" id="cboEpacio" name="cboEpacio" required th:field="*{espacio}">
+                        <option value="">Seleccione un Espacio</option>
+                        <option th:each="esp : ${listaEspacio}" th:value="${esp.idEspacio}" th:text="${esp.nombre}"></option>
+                    </select>
+                </div> 
+            </div>
+            <div class="row"> 
+                <div class="col-4">
+                    <label for="txtEst" class="form-label">Estado:</label>                                                    
+                    <select class="form-select" id="estado" th:field="*{estado}" required>
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="col-4">
+                <button type="submit" class="btn btn-primary">Registrar</button>
+                <a th:href="@{/dashboardAdministrador}" class="btn btn-dark">Regresar</a>
+            </div>
+        </form>
+        <!--Fin formulario-->
+        <br>
+        <br>
+        <br>
+        <h2>Lista de Entrenamientos</h2>
+    <!--Inicio tabla-->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr> 
+                <th scope="col">Código</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Lugar</th>
+                <th scope="col">Duración</th>
+                <th scope="col">Capacidad Max.</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Hora Inicio</th>
+                <th scope="col">Hora Fin</th>
+
+                <th scope="col">Entrenador</th>
+                <th scope="col">Espacio</th>
+
+                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entt : ${listaEntrenamientos}">
+                <th scope="row" th:text="${entt.idEntrenamiento}"></th>  
+                <td th:text="${entt.tipo == 'personal' ? 'Personal' : 'Grupal'}"></td>
+                <td th:text="${entt.lugar == 'aire_libre'} ? 'Aire Libre' : 'Local'"></td>
+                <td th:text="${entt.duracion}"></td>
+                <td th:text="${entt.capacidad}"></td>
+                <td th:text="${entt.fecha}"></td>
+                <td th:text="${entt.horaInicio}"></td>
+                <td th:text="${entt.horaFin}"></td>
+
+                <!--tablas cruzada-->
+                <td th:text="${entt.entrenador.nombres}"></td> 
+                <td th:text="${entt.espacio.nombre}"></td> 
+
+                <td th:text="${entt.estado == 'activo' ? 'Activo' : 'Inactivo'}"></td>
+                <td>
+                    <a th:href="@{/entrenamiento/actualizar/{id}(id=${entt.idEntrenamiento})}" class="btn btn-success">Actualizar</a>
+                    <a th:href="@{/entrenamiento/eliminar/{id}(id=${entt.idEntrenamiento})}" class="btn btn-danger">Eliminar</a>
+                </td>
+
+            <tr>
+        </tbody>
+        </table>
+    </div>
+    <!--Fin tabla-->
+    
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  </body>
+</html>

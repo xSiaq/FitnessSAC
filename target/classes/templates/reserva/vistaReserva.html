@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FitnessSAC | Gestión Entrenamiento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  </head>
+  <body>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a th:href="@{/dashboardAdministrador}" class="nav-link active" aria-current="page">Home</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Reclamos</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Pricing</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
+    <div class="container my-5">
+        <h1>Gestión de Reservas</h1>
+
+        <!--Inicio formulario-->
+
+        <form class="input-group" th:action="@{/reserva/buscar}" method="POST">
+            <input type="search" name="clienteBusqueda" class="form-control rounded" placeholder="Ingresa un cliente para ver sus reservas" th:value="${placeholder}"/>
+            <button class="btn btn-outline-primary" type="submit">Buscar</button>
+        </form>
+
+        <div class="col-4 mt-4">
+            <a th:href="@{/dashboardAdministrador}" class="btn btn-dark">Regresar</a>
+        </div>
+
+        <!--Fin formulario-->
+
+        <br>
+        <br>
+        <br>
+        <h2>Lista de Reservas por Cliente</h2>
+        <!--Inicio tabla-->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Fecha Reserva</th>
+
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">DNI</th>
+
+                    <th scope="col">Lugar</th>
+
+                    <th scope="col">Entrenador</th>
+
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="entt : ${listaReservas}">
+                    <th scope="row" th:text="${entt.idReserva}"></th>
+                    <th th:text="${entt.fechaReserva}"></th>
+
+                    <!--tablas cruzada-->
+                    <td th:text="${entt.cliente.nombres}"></td>
+                    <td th:text="${entt.cliente.apellidos}"></td>
+                    <td th:text="${entt.cliente.dni}"></td>\
+
+                    <!--tablas cruzada-->
+                    <td th:text="${entt.entrenamiento.lugar}"></td>
+
+                    <!--tablas cruzada-->
+                    <td th:text="${entt.entrenamiento.entrenador.nombres}"></td>
+
+                    <td th:text="${entt.estado == 'reservado' ? 'Reservado' : 'Cancelado'}"></td>
+                    <td>
+                        <a th:href="@{/reserva/eliminar/{id}(id=${entt.idReserva})}" class="btn btn-danger">Eliminar</a>
+                    </td>
+
+                <tr>
+            </tbody>
+            </table>
+        </div>
+    <!--Fin tabla-->
+    
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  </body>
+</html>
